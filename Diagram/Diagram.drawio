@@ -1,1 +1,42 @@
-<mxfile host="app.diagrams.net" modified="2023-02-15T15:01:41.683Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" version="20.8.20" etag="P6shI_9XW-_-4Af4axQT" type="github"><diagram name="Страница 1" id="NRoh1W8VpV2oMRA1rmgm">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2023-02-15T15:05:44.997Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="BnRFdSIsFZytgY4g6USN" version="20.8.20" type="github">
+  <diagram name="Страница 1" id="NRoh1W8VpV2oMRA1rmgm">
+    <mxGraphModel dx="600" dy="395" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="iPINDICKUT_UxV_5FuTi-1" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="80" width="100" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="250" width="40" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-3" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="105" y="260" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-4" value="&lt;b&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;Kiosk&lt;/font&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="50" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-5" value="" style="rounded=1;whiteSpace=wrap;html=1;fontSize=15;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="100" y="90" width="80" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-6" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;font-size: 13px;&quot;&gt;Available statuses&lt;/font&gt;&lt;/span&gt;" style="swimlane;whiteSpace=wrap;html=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="230" y="50" width="150" height="240" as="geometry">
+            <mxRectangle x="230" y="50" width="150" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-8" value="CustomerReady" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="iPINDICKUT_UxV_5FuTi-6">
+          <mxGeometry x="10" y="30" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-9" value="WhiteScreen" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="iPINDICKUT_UxV_5FuTi-6">
+          <mxGeometry x="10" y="80" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-10" value="SleepMode" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="iPINDICKUT_UxV_5FuTi-6">
+          <mxGeometry x="10" y="130" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iPINDICKUT_UxV_5FuTi-11" value="Off" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;" vertex="1" parent="iPINDICKUT_UxV_5FuTi-6">
+          <mxGeometry x="10" y="180" width="130" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
