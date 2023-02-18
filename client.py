@@ -3,6 +3,7 @@ from datetime import datetime
 import socket
 import time
 import os
+import ctypes
 import subprocess
 import psutil
 
@@ -66,6 +67,14 @@ def process_exists(process_name):
     # because Fail message could be translated
     return last_line.lower().startswith(process_name.lower())
 
+def last_boot():
+    lib = ctypes.windll.kernel32
+    t = lib.GetTickCount64()
+    t = int(str(t)[:-3])
+    mins, sec = divmod(t, 60)
+    hour, mins = divmod(mins, 60)
+    days, hour = divmod(hour, 24)
+    return days, hour, mins, sec
 
 def get_service(name):
     service = None
@@ -110,8 +119,13 @@ def get_software_running():
         winprint_service = False
     return mid, winpint_normal, winprint_service, kiosk
 
+def send_init_message():
+    days, hour, mins, sec = last_boot()
+    message = f'KIOSK INITIALISATION MESSAGE/LAST BOOT AT-{days}:{hour}:{mins}:{sec}'
+    send(message)
 
 #wait_till_next_minute()
+send_init_message()
 running = True
 while running:
     """-------------------------------------------MAIN LOOP-----------------------------------------"""
@@ -119,17 +133,24 @@ while running:
     if mid and kiosk and (winprint_service or winprint_normal):
         if winprint_normal and winprint_service:
             print("[ERROR] Both winprint as normal process and winprint as service are running!!!")
-            send(f'KIOSK CONNECTION/SENT AT:{datetime.now().strftime("%H:%M:%S")}/BY:{os.getlogin()}/STATUS:2WinPrints')
+            send(f'KIOSK CONNECTION/SENT AT-{datetime.now().strftime("%H:%M:%S")}/BY-{os.getlogin()}/STATUS-2WinPrints')
         else:
             print("[SOFTWARE STATUS] All necessary programs are running...")
             status = get_current_online_status()
             print(f"[KIOSK STATUS] {status}")
-            send(f'KIOSK CONNECTION/SENT AT:{datetime.now().strftime("%H:%M:%S")}/BY:{os.getlogin()}/STATUS:{status}')
+            send(f'KIOSK CONNECTION/SENT AT-{datetime.now().strftime("%H:%M:%S")}/BY-{os.getlogin()}/STATUS-{status}')
     else:
         print("[SOFTWARE STATUS] Not all programs are running!!!\n"
               f"\t[MID] {mid}; [WINPRINT_PROCESS] {winprint_normal};\n"
               f"\t[WINPRINT_SERVICE] {winprint_service}; [KIOSK] {kiosk}")
-        send(f'KIOSK CONNECTION/SENT AT:{datetime.now().strftime("%H:%M:%S")}/BY:{os.getlogin()}/STATUS:NotAllPrograms')
+        send(f'KIOSK CONNECTION/SENT AT-{datetime.now().strftime("%H:%M:%S")}/BY-{os.getlogin()}/STATUS-NotAllPrograms')
+        days, hour, mins, sec = last_boot()
+        if str(days) == '0' and str(hour) == '0' and int(mins)<=2:
+            #launch programs
+            continue
+        else:
+            #make some kind of notification that there was a failure launching programs
+            continue
     """_____________________________________________________________________________________________"""
 
     """Code that helps running loop every minute at *:00"""

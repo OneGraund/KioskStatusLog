@@ -15,9 +15,9 @@ server.bind(ADDR)
 def msg_as_dict(msg):
     msg = msg.split('/')
     kiosk_log = {
-        'Time': msg[1].split(':')[1],
-        'From': msg[2].split(':')[1],
-        'Status': msg[3].split(':')[1]
+        'Time': msg[1].split('-')[1],
+        'From': msg[2].split('-')[1],
+        'Status': msg[3].split('-')[1]
     }
     return kiosk_log
 
@@ -32,13 +32,16 @@ def handle_client(conn, addr):
             if msg == DISCONNECT_MESSAGE:
                 connected = False
             cur_time = datetime.now().strftime('%H:%M:%S')
-            if msg.find('KIOSK CONNECTION')==-1 or msg.find('SENT AT')==-1 or msg.find('STATUS')==-1:
-                print(f"[{addr}] {msg}")
-            else:
-                print(f'[KIOSK STATUS REPORT] {msg}')
+            if msg.find('KIOSK CONNECTION')!=-1 and msg.find('SENT AT')!=-1 and msg.find('STATUS')!=-1:
+                print(f'[KIOSK STATUS REPORT] from {addr[0]}')# {msg}')
                 kiosk_log = msg_as_dict(msg)
                 print(f"\t[TIME] {kiosk_log['Time']}; [USER] {kiosk_log['From']};\n"
                       f"\t[STATUS] {kiosk_log['Status']}")
+            if msg.find('KIOSK INITIALISATION MESSAGE')!=-1 and msg.find('LAST BOOT AT')!=-1:
+                print(f'[INIT MESSAGE] from {addr[0]}')# {msg}')
+            else:
+                print(f"[{addr}] {msg}")
+
             conn.send(f"Server received message at: {cur_time}".encode(FORMAT))
 
 
