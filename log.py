@@ -129,32 +129,42 @@ class Sheet:
         pass
 
     def update_sheet_from_file(self, f):
-        to_upd_ids = compare_file_and_sheet(self, f)
-        sh_logs = self.get_all_logs_as_dict()
-        f_logs = self.get_all_logs_as_dict()
-        if to_upd_ids:
-            days_to_upd = f.get_last_day()
-            to_upd=[]
-            for day in range(1, days_to_upd+1):
-                to_upd = []
-                if day<10:
-                    day_as_str = f"0{day}.{self.wks_name.split('.')[1]}." \
-                                 f"{self.wks_name.split(' ')[3].split('.')[2]}"
-                else:
-                    day_as_str = f"0{day}.{self.wks_name.split('.')[1]}." \
-                                 f"{self.wks_name.split(' ')[3].split('.')[2]}"
-                print(collections.Counter(sh_logs['Date']))
-                print(collections.Counter(f_logs['Date']))
-                print(day_as_str)
-                print(collections.Counter(sh_logs['Date'])[day_as_str])
-                print(collections.Counter(f_logs['Date'])[day_as_str])
-                if collections.Counter(sh_logs['Date'])[day_as_str]!=collections.Counter(f_logs['Date'])[day_as_str]:
-                    for i in range(to_upd_ids[1441*day], len(f.buff)%1441):
-                        to_upd.append([(f.buff)[i].split(' ')[2]])
-                    print(to_upd_ids)
-                    self.wks.update(f"{Sheet.alphabet[day]}{to_upd_ids[0] + 2 + 1441*(day-1)}:{len(f.buff) + 1 - 1441*day}", to_upd)
+        missing_ids = compare_file_and_sheet(self, f)
+        missing_buff = {'Date': [], 'Time': [], 'Status': [], 'date_int': []}
+        for id in missing_ids:
+            missing_buff['Date'].append(f.buff[id].split(' ')[0])
+            missing_buff['Time'].append(f.buff[id].split(' ')[1])
+            missing_buff['Status'].append(f.buff[id].split(' ')[2])
+            missing_buff['date_int'].append(int(missing_buff['Date'][id].split('.')[0]))
+        if missing_ids:
+            print("[TABLE] Updating google worksheet table...")
+            limits = {
+                'starting_date': f.buff[missing_ids[0]].split(' ')[0],
+                'starting_time': f.buff[missing_ids[0]].split(' ')[1],
+                'ending_date': f.buff[missing_ids[len(missing_ids)-1]].split(' ')[0],
+                'ending_time': f.buff[missing_ids[len(missing_ids)-1]].split(' ')[1]
+            }
+            limits['st_d_int'] = int(limits['starting_date'].split('.')[0])
+            limits['en_d_int'] = int(limits['ending_date'].split('.')[0])
+            dif = limits['en_d_int'] - limits['st_d_int'] + 1
+            print(f"[LIMITS] Here are limits of the incoming update:\n\t"
+                  f"[STARTING_DATE] {limits['starting_date']}\n\t"
+                  f"[STARTING_TIME] {limits['starting_time']}\n\t"
+                  f"[ENDING_DATE] {limits['ending_date']}\n\t"
+                  f"[ENDING_TIME] {limits['ending_time']}\n\t"
+                  f"---------------------\n\t|-To update {dif} days-|\n\t"
+                  "---------------------")
+            # Creating array for every separete day and sending it to update.
+            for i in range(dif):
+                to_send = []
+                on_day_int = limits['st_d_int'] + i
+                # Figure out how much logs are there to update in this day
+                logs_amount = missing_buff['date_int'].count(on_day_int)
+                print(f"[DEBUGGING] In day {on_day_int}: {logs_amount} statuses")
+            
         else:
-            return '[UPDATED] Worksheet is up to date with local file ...'
+            print("[TABLE] Google worksheet is up to date. No need to update anything")
+
 
 
 def compare_file_and_sheet(sh, f):
