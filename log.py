@@ -135,7 +135,7 @@ class Sheet:
             missing_buff['Date'].append(f.buff[id].split(' ')[0])
             missing_buff['Time'].append(f.buff[id].split(' ')[1])
             missing_buff['Status'].append(f.buff[id].split(' ')[2])
-            missing_buff['date_int'].append(int(missing_buff['Date'][id].split('.')[0]))
+        for date in missing_buff['Date']: missing_buff['date_int'].append(int(date.split('.')[0]))
         if missing_ids:
             print("[TABLE] Updating google worksheet table...")
             limits = {
@@ -145,7 +145,9 @@ class Sheet:
                 'ending_time': f.buff[missing_ids[len(missing_ids)-1]].split(' ')[1]
             }
             limits['st_d_int'] = int(limits['starting_date'].split('.')[0])
+            limits['st_t_int'] = int(limits['starting_time'].split(':')[0])*60 + int(limits['starting_time'].split(':')[1])
             limits['en_d_int'] = int(limits['ending_date'].split('.')[0])
+            limits['en_t_int'] = int(limits['ending_time'].split(':')[0])*60 + int(limits['ending_time'].split(':')[1])
             dif = limits['en_d_int'] - limits['st_d_int'] + 1
             print(f"[LIMITS] Here are limits of the incoming update:\n\t"
                   f"[STARTING_DATE] {limits['starting_date']}\n\t"
@@ -155,13 +157,15 @@ class Sheet:
                   f"---------------------\n\t|-To update {dif} days-|\n\t"
                   "---------------------")
             # Creating array for every separete day and sending it to update.
-            for i in range(dif):
-                to_send = []
-                on_day_int = limits['st_d_int'] + i
-                # Figure out how much logs are there to update in this day
-                logs_amount = missing_buff['date_int'].count(on_day_int)
-                print(f"[DEBUGGING] In day {on_day_int}: {logs_amount} statuses")
-            
+            all_dump=[]
+            for id in missing_ids:
+                splited = f.buff[id].split(' ')
+                all_dump.append([
+                    int(splited[1].split(':')[0])*60 + int(splited[1].split(':')[1])+2,     # row
+                    int(splited[0].split('.')[0])+1,        # col
+                    splited[2]]         # value
+                )
+
         else:
             print("[TABLE] Google worksheet is up to date. No need to update anything")
 
@@ -182,7 +186,7 @@ def compare_file_and_sheet(sh, f):
     missing_ids = []
     message = f'[DIFFERENCE SHEET FILE] Spreadsheet is missing {dif} statuses for this date and time:'
     for i in range(dif):
-        message += f"\n\t[{f_d['Date'][len(sh_d['Date']) + i]}] [{f_d['Time'][len(sh_d['Time']) + i]}]" \
+        message += f"\n\t[ID: {i}] [{f_d['Date'][len(sh_d['Date']) + i]}] [{f_d['Time'][len(sh_d['Time']) + i]}]" \
                    f" {f_d['Status'][len(sh_d['Status']) + i]}"
         missing_ids.append(len(sh_d['Date']) + i)
     print(message)
